@@ -8,12 +8,10 @@ namespace SteamAccountSwitcher2
     /// </summary>
     public partial class AccountWindow : Window
     {
-        private SteamAccount newAcc;
-
-        /// <summary>
-        /// Creates a new instance of the AccountWindow class. Allows the user to create new accounts.
-        /// </summary>
-        public AccountWindow()
+		/// <summary>
+		/// Creates a new instance of the AccountWindow class. Allows the user to create new accounts.
+		/// </summary>
+		public AccountWindow()
         {
             InitializeComponent();
             comboBoxType.ItemsSource = Enum.GetValues(typeof(AccountType));
@@ -28,11 +26,13 @@ namespace SteamAccountSwitcher2
         public AccountWindow(SteamAccount accToEdit)
         {
             if (accToEdit == null)
-                throw new ArgumentNullException();
+			{
+				throw new ArgumentNullException();
+			}
 
-            InitializeComponent();
-            this.Title = "Edit Account";
-            newAcc = accToEdit;
+			InitializeComponent();
+            Title = "Edit Account";
+            Account = accToEdit;
 
             comboBoxType.ItemsSource = Enum.GetValues(typeof(AccountType));
             comboBoxType.SelectedItem = accToEdit.Type;
@@ -45,27 +45,29 @@ namespace SteamAccountSwitcher2
             labelIsCached.Visibility = accToEdit.CachedAccount ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        /// <summary>
-        /// Accessor to the Account associated with the window.
-        /// </summary>
-        public SteamAccount Account => newAcc;
+		/// <summary>
+		/// Accessor to the Account associated with the window.
+		/// </summary>
+		public SteamAccount Account { get; private set; }
 
-        private void buttonSave_Click(object sender, RoutedEventArgs e)
+		private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
             if (ValidateInput())
             {
-                if (newAcc == null)
+                if (Account == null)
                 {
-                    newAcc = new SteamAccount(textBoxUsername.Text, textBoxPassword.Password);
-                    newAcc.Type = (AccountType)comboBoxType.SelectedValue;
-                    newAcc.Name = textBoxName.Text;
+	                Account = new SteamAccount(textBoxUsername.Text, textBoxPassword.Password)
+	                {
+		                Type = (AccountType) comboBoxType.SelectedValue, 
+		                Name = textBoxName.Text
+	                };
                 }
                 else
                 {
-                    newAcc.AccountName = textBoxUsername.Text;
-                    newAcc.Password = textBoxPassword.Password;
-                    newAcc.Name = textBoxName.Text;
-                    newAcc.Type = (AccountType)comboBoxType.SelectedValue;
+                    Account.AccountName = textBoxUsername.Text;
+                    Account.Password = textBoxPassword.Password;
+                    Account.Name = textBoxName.Text;
+                    Account.Type = (AccountType)comboBoxType.SelectedValue;
                 }
                 
 
@@ -75,40 +77,38 @@ namespace SteamAccountSwitcher2
 
         private bool ValidateInput()
         {
-            bool success = true;
-            string errorstring = "";
-            if (String.IsNullOrEmpty(textBoxName.Text))
+            var success = true;
+            var errorString = "";
+            if (string.IsNullOrEmpty(textBoxName.Text))
             {
                 success = false;
-                errorstring += "Profile name cannot be empty!\n";
+                errorString += "Profile name cannot be empty!\n";
             }
 
-            if (String.IsNullOrEmpty(textBoxUsername.Text))
+            if (string.IsNullOrEmpty(textBoxUsername.Text))
             {
                 success = false;
-                errorstring += "Username cannot be empty!\n";
+                errorString += "Username cannot be empty!\n";
             }
 
-            if (String.IsNullOrEmpty(textBoxPassword.Password) && labelIsCached.Visibility != Visibility.Visible)
+            if (string.IsNullOrEmpty(textBoxPassword.Password) && labelIsCached.Visibility != Visibility.Visible)
             {
                 success = false;
-                errorstring += "Password cannot be empty!\n";
+                errorString += "Password cannot be empty!\n";
             }
 
             if (success)
             {
                 return true;
             }
-            else
-            {
-                MessageBox.Show(errorstring, "Validation problem", MessageBoxButton.OK, MessageBoxImage.Information);
-                return false;
-            }
+
+            MessageBox.Show(errorString, "Validation problem", MessageBoxButton.OK, MessageBoxImage.Information);
+            return false;
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
-            newAcc = null;
+            Account = null;
             Close();
         }
     }

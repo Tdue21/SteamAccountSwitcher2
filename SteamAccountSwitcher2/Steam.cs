@@ -44,9 +44,11 @@ namespace SteamAccountSwitcher2
         public void KillSteam()
         {
             var steamProcesses = Process.GetProcessesByName("steam");
-            if (steamProcesses.Length > 0) 
-                steamProcesses[0].Kill();
-        }
+            if (steamProcesses.Length > 0)
+			{
+				steamProcesses[0].Kill();
+			}
+		}
 
         public void CleanKillSteam()
         {
@@ -72,9 +74,12 @@ namespace SteamAccountSwitcher2
         {
             var finished = false;
 
-            if (IsSteamRunning()) CleanKillSteam();
+            if (IsSteamRunning())
+			{
+				CleanKillSteam();
+			}
 
-            var waitTimer = 30;
+			var waitTimer = 30;
             while (finished == false)
             {
                 if (waitTimer == 0)

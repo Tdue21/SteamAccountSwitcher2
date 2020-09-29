@@ -4,11 +4,11 @@ namespace SteamAccountSwitcher2.Settings
 {
     public class UserSettings
     {
-        private bool _globalSettings;
+        private readonly bool _globalSettings;
 
+        private EncryptionType _encryptionType;
         private string _steamInstallDir;
-        private EncryptionType _ecryptionType;
-        private bool _autostart;
+        private bool _autoStart;
 
 
         public UserSettings() : this(false)
@@ -21,10 +21,9 @@ namespace SteamAccountSwitcher2.Settings
             _globalSettings = global;
             if (_globalSettings)
             {
-                _autostart = Properties.Settings.Default.autostart;
+                _autoStart = Properties.Settings.Default.autostart;
                 _steamInstallDir = Properties.Settings.Default.steamInstallDir;
-                _ecryptionType =
-                    (EncryptionType) Enum.Parse(typeof(EncryptionType), Properties.Settings.Default.encryption);
+                _encryptionType = (EncryptionType) Enum.Parse(typeof(EncryptionType), Properties.Settings.Default.encryption);
             }
         }
 
@@ -34,64 +33,86 @@ namespace SteamAccountSwitcher2.Settings
             set
             {
                 _steamInstallDir = value; 
-                if(_globalSettings) Properties.Settings.Default.steamInstallDir = value; 
-            }
+                if(_globalSettings)
+				{
+					Properties.Settings.Default.steamInstallDir = value;
+				}
+			}
         }
 
-        public EncryptionType EcryptionType
+        public EncryptionType EncryptionType
         {
-            get => _ecryptionType;
+            get => _encryptionType;
             set
             {
-                _ecryptionType = value;
-                if (_globalSettings) 
-                    Properties.Settings.Default.encryption = value.ToString();
-            }
+                _encryptionType = value;
+                if (_globalSettings)
+				{
+					Properties.Settings.Default.encryption = value.ToString();
+				}
+			}
         }
 
-        public bool Autostart
+        public bool AutoStart
         {
-            get => _autostart;
+            get => _autoStart;
             set
             {
-                _autostart = value;
-                if (_globalSettings) Properties.Settings.Default.autostart = value;
-            }
+                _autoStart = value;
+                if (_globalSettings)
+				{
+					Properties.Settings.Default.autostart = value;
+				}
+			}
         }
 
         protected bool Equals(UserSettings otherUserSettings)
         {
             return _steamInstallDir == otherUserSettings._steamInstallDir &&
-                   _ecryptionType == otherUserSettings._ecryptionType &&
-                   _autostart == otherUserSettings._autostart;
+                   _encryptionType == otherUserSettings._encryptionType &&
+                   _autoStart == otherUserSettings._autoStart;
         }
 
         public UserSettings Copy()
         {
             var copySettings = new UserSettings
             {
-                Autostart = Autostart,
+                AutoStart = AutoStart,
                 SteamInstallDir = SteamInstallDir,
-                EcryptionType = EcryptionType
+                EncryptionType = EncryptionType
             };
             return copySettings;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((UserSettings) obj);
+            if (ReferenceEquals(null, obj))
+			{
+				return false;
+			}
+
+			if (ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+
+			if (obj.GetType() != this.GetType())
+			{
+				return false;
+			}
+
+			return Equals((UserSettings) obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var hashCode = (_steamInstallDir != null ? _steamInstallDir.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (_ecryptionType != null ? _ecryptionType.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ _autostart.GetHashCode();
+	            // ReSharper disable NonReadonlyMemberInGetHashCode
+	            var hashCode = _steamInstallDir != null ? _steamInstallDir.GetHashCode() : 0;
+	            hashCode = (hashCode * 397) ^ _encryptionType.GetHashCode();
+                hashCode = (hashCode * 397) ^ _autoStart.GetHashCode();
+                // ReSharper restore NonReadonlyMemberInGetHashCode
                 return hashCode;
             }
         }

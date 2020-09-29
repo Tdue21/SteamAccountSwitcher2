@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using SteamAccountSwitcher2.Settings;
 
 namespace SteamAccountSwitcher2
@@ -24,9 +23,9 @@ namespace SteamAccountSwitcher2
             _windowSettings = SasManager.Instance.GlobalSettings;
 
             textSteamInstallDir.Text = _windowSettings.SteamInstallDir;
-            checkBoxAutostart.IsChecked = _windowSettings.Autostart;
+            checkBoxAutostart.IsChecked = _windowSettings.AutoStart;
 
-            EncryptionType enc = _windowSettings.EcryptionType;
+            var enc = _windowSettings.EncryptionType;
             switch (enc)
             {
                 case EncryptionType.Basic:
@@ -38,9 +37,8 @@ namespace SteamAccountSwitcher2
                     PasswordOptionsGroupBox.Visibility = Visibility.Visible;
                     break;
                 default:
-                    MessageBox.Show(
-                        "Encryption type not supported! Make sure you are using the latest SteamAccountSwitcher!",
-                        "Unspported Encryption Type", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Encryption type not supported! Make sure you are using the latest SteamAccountSwitcher!",
+                        "Unsupported Encryption Type", MessageBoxButton.OK, MessageBoxImage.Error);
                     radioButtonBasicEnc.IsChecked = false;
                     radioButtonBasicEnc.IsEnabled = false;
                     radioButtonPasswordEnc.IsChecked = false;
@@ -54,15 +52,15 @@ namespace SteamAccountSwitcher2
             return !SasManager.Instance.GlobalSettings.Equals(_windowSettings);
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var doClose = TryClosing();
             e.Cancel = !doClose;
         }
 
-        private void buttonBrowseSteamInstallDir_Click(object sender, RoutedEventArgs e)
+        private void ButtonBrowseSteamInstallDirClick(object sender, RoutedEventArgs e)
         {
-            string installDir = UserInteraction.selectSteamDirectory(@"C:\Program Files (x86)\Steam");
+            var installDir = UserInteraction.selectSteamDirectory(@"C:\Program Files (x86)\Steam");
             if (installDir != null)
             {
                 _windowSettings.SteamInstallDir = installDir;
@@ -79,13 +77,13 @@ namespace SteamAccountSwitcher2
 
         private void checkBox_Checked(object sender, RoutedEventArgs e)
         {
-            _windowSettings.Autostart = true;
+            _windowSettings.AutoStart = true;
             MadeChange();
         }
 
         private void checkBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            _windowSettings.Autostart = false;
+            _windowSettings.AutoStart = false;
             MadeChange();
         }
 
@@ -122,13 +120,13 @@ namespace SteamAccountSwitcher2
 
         private void radioButtonBasicEnc_Checked(object sender, RoutedEventArgs e)
         {
-            _windowSettings.EcryptionType = EncryptionType.Basic;
+            _windowSettings.EncryptionType = EncryptionType.Basic;
             MadeChange();
         }
 
         private void radioButtonPasswordEnc_Checked(object sender, RoutedEventArgs e)
         {
-            _windowSettings.EcryptionType = EncryptionType.Password;
+            _windowSettings.EncryptionType = EncryptionType.Password;
             MadeChange();
         }
 

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SteamAccountSwitcher2"
         mc:Ignorable="d"
         Title="Settings" Height="268" Width="247" Icon="../images/gear.png" MinWidth="400"
-        Closing="Window_Closing" WindowStartupLocation="CenterOwner" MinHeight="300">
+        Closing="WindowClosing" WindowStartupLocation="CenterOwner" MinHeight="300">
     <Grid>
 
         <TabControl Margin="5,5,5,34" MinHeight="200">
@@ -23,7 +23,7 @@
                                      VerticalAlignment="Bottom" Margin="0,0,70,0" IsEnabled="False" />
                             <Button x:Name="buttonBrowseSteamInstallDir" Content="Browse" HorizontalAlignment="Right"
                                     VerticalAlignment="Bottom" Width="70" Height="23"
-                                    Click="buttonBrowseSteamInstallDir_Click" />
+                                    Click="ButtonBrowseSteamInstallDirClick" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Margin="5,92,5,0" FontSize="11"

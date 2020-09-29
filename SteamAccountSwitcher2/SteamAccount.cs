@@ -1,21 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace SteamAccountSwitcher2
 {
     public class SteamAccount
     {
-        private string _name;
-        private string _accountName;
-        private string _password;
-        private AccountType _type;
-        private string _steamId;
-        private string _personaName;
-        private bool _rememberPassword;
-        private bool _mostrecent;
-        private long _timestamp;
-        private bool _cachedAccount;
-
         private const string ImageFolder = "images";
 
         public SteamAccount()
@@ -32,80 +20,44 @@ namespace SteamAccountSwitcher2
         }
 
         public SteamAccount(string steamId, string accountName, string personaName, bool rememberPassword,
-            bool mostrecent, long timestamp)
+            bool mostRecent, long timestamp)
         {
             Name = PersonaName = personaName;
             SteamId = steamId;
             AccountName = accountName;
             PersonaName = personaName;
             RememberPassword = rememberPassword;
-            Mostrecent = mostrecent;
+            MostRecent = mostRecent;
             Timestamp = timestamp;
             Type = AccountType.Main;
         }
 
-        public string SteamId
-        {
-            get => _steamId;
-            set => _steamId = value;
-        }
+        public string SteamId { get; set; }
 
-        public string AccountName
-        {
-            get => _accountName;
-            set => _accountName = value;
-        }
+        public string AccountName { get; set; }
 
-        public string PersonaName
-        {
-            get => _personaName;
-            set => _personaName = value;
-        }
+        public string PersonaName { get; set; }
 
-        public bool RememberPassword
-        {
-            get => _rememberPassword;
-            set => _rememberPassword = value;
-        }
+        public bool RememberPassword { get; set; }
 
-        public bool Mostrecent
-        {
-            get => _mostrecent;
-            set => _mostrecent = value;
-        }
+        public bool MostRecent { get; set; }
 
-        public long Timestamp
-        {
-            get => _timestamp;
-            set => _timestamp = value;
-        }
+        public long Timestamp { get; set; }
 
-        public string Name
-        {
-            get => _name;
-            set => this._name = value;
-        }
+        public string Name { get; set; }
 
-        public string Password
-        {
-            get => _password;
-            set => this._password = value;
-        }
+        public string Password { get; set; }
 
-        public AccountType Type
-        {
-            get => _type;
-            set => this._type = value;
-        }
+        public AccountType Type { get; set; }
 
         public string AccountImage => Path.Combine(SasManager.Instance.SteamInstallation.InstallDir, "config\\avatarcache", SteamId + ".png");
 
-        public string BGImage => ImageFolder + "/acc-bg-" + _type.ToString().ToLower() + ".jpg";
+        public string BGImage => ImageFolder + "/acc-bg-" + Type.ToString().ToLower() + ".jpg";
 
         //public bool IsCached => string.IsNullOrEmpty(_password);
         public bool CachedAccount
         {
-            get => string.IsNullOrEmpty(_password);
+            get => string.IsNullOrEmpty(Password);
             //set => _cachedAccount = value;
         }
 
@@ -121,7 +73,7 @@ namespace SteamAccountSwitcher2
 
         protected bool Equals(SteamAccount other)
         {
-            return Name == other._name && _accountName == other._accountName && _password == other._password && _type == other._type && _steamId == other._steamId && _personaName == other._personaName && _cachedAccount == other._cachedAccount;
+            return Name == other.Name && AccountName == other.AccountName && Password == other.Password && Type == other.Type && SteamId == other.SteamId && PersonaName == other.PersonaName;
         }
 
         public override bool Equals(object obj)
@@ -136,13 +88,12 @@ namespace SteamAccountSwitcher2
         {
             unchecked
             {
-                var hashCode = (_name != null ? _name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (_accountName != null ? _accountName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (_password != null ? _password.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (int) _type;
-                hashCode = (hashCode * 397) ^ (_steamId != null ? _steamId.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (_personaName != null ? _personaName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ _cachedAccount.GetHashCode();
+                var hashCode = (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (AccountName != null ? AccountName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Password != null ? Password.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (int) Type;
+                hashCode = (hashCode * 397) ^ (SteamId != null ? SteamId.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (PersonaName != null ? PersonaName.GetHashCode() : 0);
                 return hashCode;
             }
         }

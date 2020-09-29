@@ -67,7 +67,7 @@ namespace SteamAccountSwitcher2
 
         public void InitializeAccountsFromFile()
         {
-            loader = new AccountLoader(GlobalSettings.EcryptionType);
+            loader = new AccountLoader(GlobalSettings.EncryptionType);
 
             if (loader.AccountFileExists())
             {
@@ -128,7 +128,7 @@ namespace SteamAccountSwitcher2
                 }
 
                 // Success
-                _globalSettings.Autostart = autostart;
+                _globalSettings.AutoStart = autostart;
             }
             catch
             {
@@ -149,9 +149,9 @@ namespace SteamAccountSwitcher2
 
         public void ApplyUserSettings(UserSettings newSettings)
         {
-            if (newSettings.Autostart != _globalSettings.Autostart)
+            if (newSettings.AutoStart != _globalSettings.AutoStart)
             {
-                SetAutoStart(newSettings.Autostart);
+                SetAutoStart(newSettings.AutoStart);
             }
 
             if (newSettings.SteamInstallDir != _globalSettings.SteamInstallDir)
@@ -159,9 +159,9 @@ namespace SteamAccountSwitcher2
                 SetSteamInstallDir(newSettings.SteamInstallDir);
             }
 
-            if (newSettings.EcryptionType != _globalSettings.EcryptionType)
+            if (newSettings.EncryptionType != _globalSettings.EncryptionType)
             {
-                SetEncryption(newSettings.EcryptionType);
+                SetEncryption(newSettings.EncryptionType);
             }
         }
 
@@ -188,7 +188,7 @@ namespace SteamAccountSwitcher2
 
             loader.EncryptionType = newEcryptionType;
             loader.SaveAccounts(AccountList.ToList());
-            _globalSettings.EcryptionType = newEcryptionType;
+            _globalSettings.EncryptionType = newEcryptionType;
         }
     }
 }

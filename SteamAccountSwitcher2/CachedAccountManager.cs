@@ -26,6 +26,9 @@ namespace SteamAccountSwitcher2
 
         public void scanForAccounts()
         {
+	        try
+	        {
+
             dynamic loginUsersVdf = VdfConvert.Deserialize(File.ReadAllText(loginUsersVDFPath));
             // 'volvo' is a VProperty, analogous to Json.NET's JProperty
             _cachedAccounts.Clear();
@@ -40,6 +43,11 @@ namespace SteamAccountSwitcher2
                         long.Parse(account.Value.Timestamp.Value.ToString())
                 ));
             }
+	        }
+	        catch (Exception e)
+	        {
+		        MessageBox.Show(e.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		    }
         }
 
         /// <summary>
@@ -96,7 +104,7 @@ namespace SteamAccountSwitcher2
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
 
